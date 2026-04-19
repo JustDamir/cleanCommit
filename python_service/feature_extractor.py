@@ -3,7 +3,6 @@ import math
 from collections import Counter
 
 def extract_features(code: str, language: str = "auto") -> dict:
-    """Извлекает признаки из кода для модели."""
     code_no_comments = re.sub(r'#.*|//.*|/\*[\s\S]*?\*/', '', code)
 
     lines = code.split('\n')
