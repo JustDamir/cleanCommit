@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* Переменные для тем */
 :root {
-    /* Темная тема (по умолчанию) */
     --bg-gradient-start: #0a0c12;
     --bg-gradient-end: #0f1117;
     --container-bg: rgba(10, 12, 18, 0.75);
@@ -19,7 +17,6 @@
 }
 
 body.light-theme {
-    /* Светлая тема */
     --bg-gradient-start: #f5f7fe;
     --bg-gradient-end: #eef2ff;
     --container-bg: rgba(255, 255, 255, 0.85);
@@ -35,7 +32,6 @@ body.light-theme {
     --header-bg: linear-gradient(135deg, rgba(94, 138, 219, 0.02) 0%, rgba(174, 101, 219, 0.02) 100%);
 }
 
-/* Базовые стили */
 * {
     margin: 0;
     padding: 0;
@@ -53,7 +49,6 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Кнопки управления */
 .header-controls {
     position: absolute;
     top: 1.5rem;
@@ -88,7 +83,6 @@ body {
     font-size: 1rem;
 }
 
-/* Терминальная линия (декор) */
 .terminal-line {
     position: fixed;
     top: 0;
@@ -115,7 +109,6 @@ body {
     }
 }
 
-/* Плавающие фигуры */
 .floating-shapes {
     position: fixed;
     top: 0;
@@ -188,7 +181,6 @@ body {
     }
 }
 
-/* Контейнер */
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -203,7 +195,6 @@ body {
     transition: background 0.3s ease;
 }
 
-/* Хедер */
 .header {
     padding: 3rem 2rem 2rem;
     text-align: left;
@@ -235,7 +226,6 @@ body {
     }
 }
 
-/* Терминальный промпт */
 .terminal-prompt {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.875rem;
@@ -324,12 +314,10 @@ body {
     animation: fadeInUp 0.6s ease-out 0.2s backwards;
 }
 
-/* Контент */
 .content {
     padding: 2rem;
 }
 
-/* Форма */
 .form-group {
     margin-bottom: 2rem;
     animation: fadeInUp 0.6s ease-out;
@@ -352,7 +340,6 @@ label {
     font-size: 0.7rem;
 }
 
-/* Кастомный селект */
 .select-wrapper {
     position: relative;
 }
@@ -408,7 +395,6 @@ select option {
     transition: all 0.2s ease;
 }
 
-/* Редактор кода с нумерацией строк - ФИКСИРОВАННЫЙ РАЗМЕР */
 .code-editor {
     display: flex;
     background: var(--input-bg);
@@ -425,7 +411,6 @@ select option {
     transform: translateY(-2px);
 }
 
-/* Нумерация строк */
 .line-numbers {
     background: var(--line-numbers-bg);
     padding: 1rem 0.75rem;
@@ -450,7 +435,6 @@ select option {
     opacity: 1;
 }
 
-/* Контейнер для текстовой области - фиксированная высота */
 .textarea-container {
     flex: 1;
     position: relative;
@@ -481,13 +465,11 @@ textarea::placeholder {
     opacity: 0.5;
 }
 
-/* Синхронизация скролла */
 .line-numbers::-webkit-scrollbar {
     width: 0;
     background: transparent;
 }
 
-/* Информационная строка */
 .info-text {
     display: flex;
     align-items: center;
@@ -522,7 +504,6 @@ textarea::placeholder {
     opacity: 0.5;
 }
 
-/* Кнопка */
 .submit-btn {
     width: 100%;
     background: linear-gradient(135deg, rgba(94, 138, 219, 0.2) 0%, rgba(130, 94, 219, 0.2) 100%);
@@ -589,7 +570,6 @@ textarea::placeholder {
     font-size: 1.1rem;
 }
 
-/* Индикатор загрузки */
 .htmx-indicator {
     opacity: 0;
     transition: opacity 0.2s;
@@ -626,7 +606,6 @@ textarea::placeholder {
     }
 }
 
-/* Результат */
 .result-area {
     margin-top: 2rem;
     padding: 1.5rem;
@@ -765,7 +744,6 @@ textarea::placeholder {
     font-family: monospace;
 }
 
-/* Стили для успешного результата */
 .result-success {
     animation: fadeInUp 0.4s ease-out;
 }
@@ -808,7 +786,6 @@ textarea::placeholder {
     left: 0;
 }
 
-/* Анимации */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -820,7 +797,6 @@ textarea::placeholder {
     }
 }
 
-/* Адаптивность */
 @media (max-width: 640px) {
     body {
         padding: 1rem;
@@ -880,7 +856,6 @@ textarea::placeholder {
     }
 }
 
-/* Кастомный скроллбар */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -919,7 +894,6 @@ textarea::placeholder {
     background: rgba(94, 138, 219, 0.7);
 }
 
-/* Стили для подсветки синтаксиса */
 .textarea-container {
     position: relative;
 }
@@ -955,7 +929,6 @@ textarea::placeholder {
     margin: 0;
 }
 
-/* Кастомизация Highlight.js темы для темного фона */
 .hljs {
     background: transparent;
     color: var(--text-primary);
@@ -1009,7 +982,6 @@ textarea::placeholder {
     color: #AE65DB;
 }
 
-/* Синхронизация скролла */
 .syntax-highlight-overlay::-webkit-scrollbar {
     width: 0;
     background: transparent;
@@ -1036,7 +1008,6 @@ textarea::placeholder {
     opacity: 1;
 }
 
-/* Стили для отображения определенного языка */
 #detectedLangDisplay {
 transition: color 0.2s ease;
 cursor: help;
@@ -1093,7 +1064,6 @@ margin-right: 0.25rem;
 animation: pulse 2s infinite;
 }
 
-/* Стили для C и C++ */
 .hljs-meta {
     color: #5EB2DB;
 }
