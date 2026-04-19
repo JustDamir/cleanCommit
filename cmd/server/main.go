@@ -20,25 +20,21 @@ func main() {
 	r := gin.Default()
 
 	wd, _ := os.Getwd()
-	fmt.Println("📁 Working directory:", wd)
-	fmt.Println("🌐 Frontend path:", filepath.Join(wd, "frontend"))
+	fmt.Println("Working directory:", wd)
+	fmt.Println("Frontend path:", filepath.Join(wd, "frontend"))
 
-	// Проверка папки frontend
 	if _, err := os.Stat("frontend"); os.IsNotExist(err) {
-		fmt.Println("⚠️  WARNING: 'frontend' folder not found!")
+		fmt.Println("WARNING: 'frontend' folder not found!")
 	} else {
-		fmt.Println("✅ Frontend folder found")
+		fmt.Println("Frontend folder found")
 	}
 
-	// Раздача статических файлов - ВАЖНО: все пути!
 	r.Static("/static", "./frontend")
 	r.StaticFile("/styles.css", "./frontend/styles.css")
 	r.StaticFile("/script.js", "./frontend/script.js")
 
-	// Дополнительно для всех файлов в frontend
 	r.GET("/:filename", func(c *gin.Context) {
 		filename := c.Param("filename")
-		// Разрешаем только css и js файлы
 		if strings.HasSuffix(filename, ".css") || strings.HasSuffix(filename, ".js") {
 			c.File("./frontend/" + filename)
 		} else {
@@ -46,16 +42,14 @@ func main() {
 		}
 	})
 
-	// Главная страница
 	r.GET("/", func(c *gin.Context) {
 		c.File("./frontend/index.html")
 	})
 
-	// API для проверки кода
 	r.POST("/api/detect", detectHandler)
 
-	fmt.Println("🚀 Go server starting on http://localhost:8080")
-	fmt.Println("📝 Static files available at:")
+	fmt.Println("Go server starting on http://localhost:8080")
+	fmt.Println("Static files available at:")
 	fmt.Println("   - /styles.css")
 	fmt.Println("   - /script.js")
 	fmt.Println("   - /static/*")
@@ -73,8 +67,8 @@ func detectHandler(c *gin.Context) {
 		<div class="error-prompt">$ validation_error</div>
 		<div class="error-icon">⚠</div>
 		<div class="error-title">[input_too_short]</div>
-		<div class="error-message">нужно ещё %d символов</div>
-		<div class="error-hint">> минимум: %d (сейчас: %d)</div>
+		<div class="error-message">need %d more characters</div>
+		<div class="error-hint">> minimum: %d (current: %d)</div>
 		</div>
 		`, minChars-nonEmptyChars, minChars, nonEmptyChars)))
 		return
@@ -112,15 +106,15 @@ func detectHandler(c *gin.Context) {
 	%d%% — %s
 	</div>
 	<div style="font-family: 'JetBrains Mono', monospace; margin: 1rem 0;">
-	<div style="color: #5E8ADB;">> вердикт: %s</div>
+	<div style="color: #5E8ADB;">> verdict: %s</div>
 	</div>
 	<div class="features">
-	<div style="color: #5E8ADB; margin-bottom: 0.5rem;">> признаки кода:</div>
+	<div style="color: #5E8ADB; margin-bottom: 0.5rem;">> code features:</div>
 	<ul>
-	<li>строк: %.0f</li>
-	<li>символов: %.0f</li>
-	<li>доля комментариев: %.3f</li>
-	<li>энтропия: %.2f</li>
+	<li>lines: %.0f</li>
+	<li>characters: %.0f</li>
+	<li>comment ratio: %.3f</li>
+	<li>entropy: %.2f</li>
 	</ul>
 	</div>
 	</div>
@@ -143,11 +137,11 @@ func countNonEmptyChars(s string) int {
 
 func getVerdict(prob float64) string {
 	if prob < 0.3 {
-		return "Скорее написан человеком"
+		return "Likely human-written"
 	} else if prob < 0.7 {
-		return "Неопределённо"
+		return "Uncertain"
 	}
-	return "С высокой вероятностью сгенерирован ИИ"
+	return "Highly likely AI-generated"
 }
 
 type PredictRequest struct {
@@ -172,7 +166,7 @@ func getPrediction(code, language string) (*PredictResponse, error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Post("http://127.0.0.1:5000/predict", "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		fmt.Println("⚠️  Python service not available, using mock data")
+		fmt.Println("Python service not available, using mock data")
 		return getMockPrediction(code), nil
 	}
 	defer resp.Body.Close()
