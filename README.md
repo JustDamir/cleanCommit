@@ -33,5 +33,7 @@
 git clone https://github.com/yourusername/clean-commit.git
 cd clean-commit
 
-chmod +x start.sh python_service/start.sh
+chmod +x start.sh
+chmod +x python_service/start.sh
+
 ./start.sh
