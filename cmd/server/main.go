@@ -21,35 +21,20 @@ func main() {
 
     wd, _ := os.Getwd()
     fmt.Println("Working directory:", wd)
-    fmt.Println("Frontend path:", filepath.Join(wd, "frontend"))
-    
+
     if _, err := os.Stat("frontend"); os.IsNotExist(err) {
-        fmt.Println("WARNING: 'frontend' folder not found!")
-    } else {
-        fmt.Println("Frontend folder found")
+        fmt.Println("'frontend' folder not found!")
+        os.Exit(1)
     }
 
     r.Static("/static", "./frontend")
-    r.StaticFile("/styles.css", "./frontend/styles.css")
-    r.StaticFile("/script.js", "./frontend/script.js")
-    
-    r.GET("/:filename", func(c *gin.Context) {
-        filename := c.Param("filename")
-        if strings.HasSuffix(filename, ".css") || strings.HasSuffix(filename, ".js") {
-            c.File("./frontend/" + filename)
-        } else {
-            c.Next()
-        }
-    })
-
     r.GET("/", func(c *gin.Context) {
         c.File("./frontend/index.html")
     })
 
     r.POST("/api/detect", detectHandler)
 
-    fmt.Println("Go server starting on http://localhost:8080")
-    fmt.Println("Python service required at http://127.0.0.1:5000")
+    fmt.Println("Go server started on http://localhost:8080")
     r.Run(":8080")
 }
 
@@ -79,7 +64,7 @@ func detectHandler(c *gin.Context) {
                 <div class="error-icon">✖</div>
                 <div class="error-title">[python_service_unavailable]</div>
                 <div class="error-message">%v</div>
-                <div class="error-hint">> запустите Python сервис: cd python_service && python app.py</div>
+                <div class="error-hint">> запустите: cd python_service && ./start.sh</div>
             </div>
         `, err)))
         return
@@ -107,18 +92,18 @@ func detectHandler(c *gin.Context) {
                 <div style="color: #5E8ADB;">> вердикт: %s</div>
             </div>
             <div class="features">
-                <div style="color: #5E8ADB; margin-bottom: 0.5rem;">> признаки кода:</div>
+                <div style="color: #5E8ADB; margin-bottom: 0.5rem;">> метрики кода:</div>
                 <ul>
                     <li>строк: %.0f</li>
                     <li>символов: %.0f</li>
-                    <li>доля комментариев: %.3f</li>
+                    <li>комментарии: %.1f%%</li>
                     <li>энтропия: %.2f</li>
                 </ul>
             </div>
         </div>
     `, color, int(pred.Probability*100), verdictText, verdict,
         pred.Features["line_count"], pred.Features["char_count"],
-        pred.Features["comment_ratio"], pred.Features["entropy"])
+        pred.Features["comment_ratio"]*100, pred.Features["entropy"])
 
     c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
 }
@@ -151,32 +136,25 @@ type PredictResponse struct {
     Probability   float64                `json:"probability"`
     IsAIGenerated bool                   `json:"is_ai_generated"`
     Features      map[string]interface{} `json:"features"`
-    Error         string                 `json:"error,omitempty"`
 }
 
 func getPrediction(code, language string) (*PredictResponse, error) {
     reqBody := PredictRequest{Code: code, Language: language}
-    jsonData, err := json.Marshal(reqBody)
-    if err != nil {
-        return nil, fmt.Errorf("marshal request: %w", err)
-    }
+    jsonData, _ := json.Marshal(reqBody)
 
     client := &http.Client{Timeout: 10 * time.Second}
     resp, err := client.Post("http://127.0.0.1:5000/predict", "application/json", bytes.NewBuffer(jsonData))
     if err != nil {
-        return nil, fmt.Errorf("Python сервис недоступен: %w", err)
+        return nil, fmt.Errorf("Python сервис недоступен")
     }
     defer resp.Body.Close()
 
     if resp.StatusCode != http.StatusOK {
         body, _ := io.ReadAll(resp.Body)
-        return nil, fmt.Errorf("ошибка Python сервиса (%d): %s", resp.StatusCode, string(body))
+        return nil, fmt.Errorf("ошибка: %s", string(body))
     }
 
     var result PredictResponse
-    if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-        return nil, fmt.Errorf("decode error: %w", err)
-    }
-
+    json.NewDecoder(resp.Body).Decode(&result)
     return &result, nil
 }
