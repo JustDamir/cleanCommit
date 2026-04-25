@@ -26,7 +26,7 @@
 - Python 3.8+
 - 100 MB RAM
 
-### Установка и запуск на Linux (Требуеться GIT)
+### Установка и запуск на Linux (Требуется GIT)
 
 ```bash
 git clone https://github.com/JustDamir/cleanCommit.git
