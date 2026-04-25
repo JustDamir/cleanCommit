@@ -30,7 +30,7 @@
 
 ```bash
 git clone https://github.com/JustDamir/cleanCommit.git
-cd clean-commit
+cd cleanCommit
 
 chmod +x start.sh
 chmod +x python_service/start.sh
