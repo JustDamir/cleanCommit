@@ -29,7 +29,7 @@
 ### Установка и запуск
 
 ```bash
-git clone https://github.com/yourusername/clean-commit.git
+git clone https://github.com/JustDamir/clean-commit.git
 cd clean-commit
 
 chmod +x start.sh
