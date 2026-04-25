@@ -26,7 +26,7 @@
 - Python 3.8+
 - 100 MB RAM
 
-### Установка и запуск на Linux
+### Установка и запуск на Linux (Требуеться GIT)
 
 ```bash
 git clone https://github.com/JustDamir/cleanCommit.git
@@ -38,11 +38,3 @@ chmod +x python_service/start.sh
 ./start.sh
 ```
 
-### Установка и запуск на Windows
-
-```bash
-git clone https://github.com/JustDamir/clean-commit.git
-
-cd clean-commit
-
-start.bat
